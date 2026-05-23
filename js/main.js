@@ -820,18 +820,31 @@ function setupNewsletterForm() {
 
 function setupActiveNavbar() {
   const navLinks = document.querySelectorAll(".nav-link");
+  const currentPage = window.location.pathname.split("/").pop();
+
+  // Remove existing active states
+  navLinks.forEach(link => link.classList.remove("active"));
+
+  // Static page active states
+  if (currentPage === "orders.html") {
+    document
+      .querySelector('a[href="orders.html"]')
+      ?.classList.add("active");
+    return;
+  }
+
+  if (currentPage === "cart.html") {
+    document
+      .querySelector('a[href="cart.html"]')
+      ?.classList.add("active");
+    return;
+  }
+
+  // Home page section tracking
   const sections = document.querySelectorAll("section");
 
-  // Click active state
-  navLinks.forEach(link => {
-    link.addEventListener("click", () => {
-      navLinks.forEach(nav => nav.classList.remove("active"));
-      link.classList.add("active");
-    });
-  });
-
-  // Scroll active state
   window.addEventListener("scroll", () => {
+
     let current = "";
 
     sections.forEach((section) => {
@@ -853,12 +866,17 @@ function setupActiveNavbar() {
 
       if (
         href === `#${current}` ||
-        (current === "specials" && href === "#menu")
+        href === `index.html#${current}` ||
+        (current === "specials" &&
+          (href === "#menu" || href === "menu.html"))
       ) {
         link.classList.add("active");
       }
     });
   });
+
+  // Trigger once on page load
+  window.dispatchEvent(new Event("scroll"));
 }
 
 // ===== Initialization =====
